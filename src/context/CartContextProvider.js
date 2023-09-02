@@ -6,9 +6,10 @@ const cartReducer = (prevState, action) => {
   switch (action.type) {
     case "ADD":
       let newItems, newtotalAmount;
-      const isExisted = prevState.items.some((item) => {
-        return item.name === action.payLoad.name;
-      });
+      const isExisted = prevState.items.some(
+        (item) => item.name === action.payLoad.name
+      );
+
       if (isExisted) {
         newItems = prevState.items.map((item) => {
           if (item.name === action.payLoad.name) {
@@ -17,13 +18,15 @@ const cartReducer = (prevState, action) => {
           return item;
         });
       } else {
-        prevState.items.push(action.payLoad);
-        newItems = [...prevState.items];
+        newItems = prevState.items.concat(action.payLoad);
       }
+
       newtotalAmount = newItems.reduce((accumulator, item) => {
         return accumulator + item.price * item.amount;
       }, 0);
+
       return { items: newItems, totalAmount: newtotalAmount };
+
     case "REMOVE":
       break;
     case "CLEAR":
