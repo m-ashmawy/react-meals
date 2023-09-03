@@ -7,12 +7,12 @@ const cartReducer = (prevState, action) => {
     case "ADD":
       let newItems, newtotalAmount;
       const isExisted = prevState.items.some(
-        (item) => item.name === action.payLoad.name
+        (item) => item.id === action.payLoad.id
       );
 
       if (isExisted) {
         newItems = prevState.items.map((item) => {
-          if (item.name === action.payLoad.name) {
+          if (item.id === action.payLoad.id) {
             item.amount += action.payLoad.amount;
           }
           return item;
