@@ -3,9 +3,9 @@ import CartContext from "./CartContext";
 
 const defaultCartState = { items: [], totalAmount: 0 };
 const cartReducer = (prevState, action) => {
+  let newItems;
   switch (action.type) {
     case "ADD":
-      let newItems, newtotalAmount;
       const isExisted = prevState.items.some(
         (item) => item.id === action.payLoad.id
       );
@@ -20,21 +20,30 @@ const cartReducer = (prevState, action) => {
       } else {
         newItems = prevState.items.concat(action.payLoad);
       }
-
-      newtotalAmount = newItems.reduce((accumulator, item) => {
-        return accumulator + item.price * item.amount;
-      }, 0);
-
-      return { items: newItems, totalAmount: newtotalAmount };
+      break;
 
     case "REMOVE":
+      newItems = prevState.items.reduce((accumulator, item) => {
+        if (item.id === action.payLoad) {
+          item.amount--;
+        }
+        if (item.amount <= 0) return accumulator;
+        return accumulator.concat(item);
+      }, []);
       break;
+
     case "CLEAR":
       break;
 
     default:
       return prevState;
   }
+
+  const newtotalAmount = newItems.reduce((accumulator, item) => {
+    return accumulator + item.price * item.amount;
+  }, 0);
+
+  return { items: newItems, totalAmount: newtotalAmount };
 };
 
 const CartContextProvider = (props) => {
