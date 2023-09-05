@@ -26,9 +26,9 @@ const cartReducer = (prevState, action) => {
       newItems = prevState.items.reduce((accumulator, item) => {
         if (item.id === action.payLoad) {
           item.amount--;
+          if (item.amount <= 0) return accumulator;
         }
-        if (item.amount <= 0) return accumulator;
-        return accumulator.concat(item);
+        return [...accumulator, item];
       }, []);
       break;
 
